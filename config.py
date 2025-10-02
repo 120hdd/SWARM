@@ -7,6 +7,7 @@ from pathlib import Path
 load_dotenv()
 
 BASE_PATH = Path(__file__).resolve().parent / "resources"  # removed trailing slash
+KYBER_ROUTER = "0x6131B5fae19EA4f9D964eAc0408E4408b66337b5"
 KYBERSWAP_API_BASE = "https://aggregator-api.kyberswap.com/"
 KYBERSWAP_API_HEADERS = {
         "Content-Type": "application/json",
@@ -15,6 +16,42 @@ KYBERSWAP_API_HEADERS = {
 
 ALCHEMY_API_KEY = os.getenv('ALCHEMY_API_KEY')
 INFURA_API_KEY = os.getenv('INFURA_API_KEY')
+
+ENS_REGISTRY_ADDRESS = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
+MULTICALL3_ADDRESS = "0xca11bde05977b3631167028862be2a173976ca11"
+
+MULTICALL3_ABI = """
+[
+  {
+    "inputs": [
+      {
+        "components": [
+          {"internalType": "address", "name": "target", "type": "address"},
+          {"internalType": "bool", "name": "allowFailure", "type": "bool"},
+          {"internalType": "bytes", "name": "callData", "type": "bytes"}
+        ],
+        "internalType": "struct Multicall3.Call3[]",
+        "name": "calls",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "aggregate3",
+    "outputs": [
+      {
+        "components": [
+          {"internalType": "bool", "name": "success", "type": "bool"},
+          {"internalType": "bytes", "name": "returnData", "type": "bytes"}
+        ],
+        "internalType": "struct Multicall3.Result[]",
+        "name": "returnData",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]
+"""
 
 QUOTER_ABI = '''[
     {
@@ -118,52 +155,110 @@ ERC20_PERMIT_ABI = '''[
     ]'''
     
 TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_spender", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "approve",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {"name": "_owner", "type": "address"},
-                {"name": "_spender", "type": "address"}
-            ],
-            "name": "allowance",
-            "outputs": [{"name": "remaining", "type": "uint256"}],
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [{"name": "_owner", "type": "address"}],
-            "name": "balanceOf",
-            "outputs": [{"name": "balance", "type": "uint256"}],
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "decimals",
-            "outputs": [{"name": "", "type": "uint8"}],
-            "type": "function"
-        }
-    ]'''
+  {
+    "type": "function",
+    "name": "transfer",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      {"name": "_to", "type": "address"},
+      {"name": "_value", "type": "uint256"}
+    ],
+    "outputs": [{"name": "", "type": "bool"}]
+  },
+  {
+    "type":"function",
+    "name":"symbol",
+    "stateMutability":"view",
+    "inputs":[],
+    "outputs":[{"name":"","type":"string"}]
+    },
+  {
+    "type":"function",
+    "name":"name",
+    "stateMutability":"view",
+    "inputs":[],
+    "outputs":[{"name":"","type":"string"}]
+  },
+  {
+    "type": "function",
+    "name": "approve",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      {"name": "_spender", "type": "address"},
+      {"name": "_value", "type": "uint256"}
+    ],
+    "outputs": [{"name": "", "type": "bool"}]
+  },
+  {
+    "type": "function",
+    "name": "allowance",
+    "stateMutability": "view",
+    "inputs": [
+      {"name": "_owner", "type": "address"},
+      {"name": "_spender", "type": "address"}
+    ],
+    "outputs": [{"name": "remaining", "type": "uint256"}]
+  },
+  {
+    "type": "function",
+    "name": "balanceOf",
+    "stateMutability": "view",
+    "inputs": [{"name": "_owner", "type": "address"}],
+    "outputs": [{"name": "balance", "type": "uint256"}]
+  },
+  {
+    "type": "function",
+    "name": "decimals",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint8"}]
+  },
+  {
+    "type": "event",
+    "name": "Transfer",
+    "inputs": [
+      {"indexed": true, "name": "from", "type": "address"},
+      {"indexed": true, "name": "to", "type": "address"},
+      {"indexed": false, "name": "value", "type": "uint256"}
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Approval",
+    "inputs": [
+      {"indexed": true, "name": "owner", "type": "address"},
+      {"indexed": true, "name": "spender", "type": "address"},
+      {"indexed": false, "name": "value", "type": "uint256"}
+    ],
+    "anonymous": false
+  }
+]'''
 
+
+ENS_REGISTRY_ABI = """
+[
+  {
+    "type":"function","stateMutability":"view","name":"resolver",
+    "inputs":[{"name":"node","type":"bytes32"}],
+    "outputs":[{"name":"resolver","type":"address"}]
+  }
+]
+"""
+ENS_PUBLIC_RESOLVER_ABI = """
+[
+  {
+    "type":"function","stateMutability":"view","name":"name",
+    "inputs":[{"name":"node","type":"bytes32"}],
+    "outputs":[{"name":"","type":"string"}]
+  },
+  {
+    "type":"function","stateMutability":"view","name":"addr",
+    "inputs":[{"name":"node","type":"bytes32"}],
+    "outputs":[{"name":"ret","type":"address"}]
+  }
+]
+"""
 
 class POLYGON :
 # RPC URL for connecting to Polygon mainnet
@@ -178,19 +273,23 @@ class POLYGON :
     # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    ADDRESS_FILE = os.path.join(BASE_PATH, "receive.txt") #public key
-    CONTRACTS_FILE = os.path.join(BASE_PATH, CHAIN_NAME, "contracts.txt")
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, CHAIN_NAME, "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, CHAIN_NAME, "tokens.txt")
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
+    
     
 
     # Token-specific settings (optional)
     MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
     ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
     TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
 
-    
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
     INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
@@ -209,33 +308,29 @@ class OP :
 
     CHAIN_ID = "10"
     CHAIN_NAME = "optimism"
-    NATIVE_TOKEN = "0x4200000000000000000000000000000000000042"
+    NATIVE_TOKEN = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
     # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
     
     # Paths to your wallet and address files
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    ADDRESS_FILE = os.path.join(BASE_PATH, "receive.txt") #public key
-    CONTRACTS_FILE = os.path.join(BASE_PATH, "OP", "contracts.txt") #token_contracts
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, "OP", "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, "OP", "tokens.txt") #token_contracts
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
 
 
-    TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        }
-    ]'''
-    
+
+    MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
+    ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
+    TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
+
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = "cbd40adce35444b88bcbca3103b7408c"
     INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
@@ -252,32 +347,28 @@ class Base :
     
     CHAIN_ID = "8453"
     CHAIN_NAME = "base"
-    NATIVE_TOKEN = "0x0000000000001fF3684f28c67538d4D072C22734"
+    NATIVE_TOKEN = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
     # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
 
     # Paths to your wallet and address files
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    ADDRESS_FILE = os.path.join(BASE_PATH, "receive.txt") #public key
-    CONTRACTS_FILE = os.path.join(BASE_PATH, "BASE", "contracts.txt") #token_contracts
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, "BASE", "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, "BASE", "tokens.txt") #token_contracts
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
 
 
-    TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        }
-    ]'''
+
+    MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
+    ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
+    TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
 
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
@@ -295,32 +386,28 @@ class ARB :
     
     CHAIN_ID = "59144"
     CHAIN_NAME = "arbitrum"
-    NATIVE_TOKEN = "0x912ce59144191c1204e64559fe8253a0e49e6548"
+    NATIVE_TOKEN = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
     # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
 
     # Paths to your wallet and address files
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    ADDRESS_FILE = os.path.join(BASE_PATH, "receive.txt") #public key
-    CONTRACTS_FILE = os.path.join(BASE_PATH, "ARB", "contracts.txt") #token_contracts
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, "ARB", "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, "ARB", "tokens.txt") #token_contracts
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
+  
 
 
-    TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        }
-    ]'''
+    MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
+    ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
+    TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
     
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
@@ -338,33 +425,29 @@ class Linea :
     
     CHAIN_ID = "59144"
     CHAIN_NAME = "linea"
-    NATIVE_TOKEN = "0x000000000000175a8b9bC6d539B3708EEd92EA6c"
+    NATIVE_TOKEN = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
      # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
 
 
     # Paths to your wallet and address files
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    ADDRESS_FILE = os.path.join(BASE_PATH, "receive.txt") #public key
-    CONTRACTS_FILE = os.path.join(BASE_PATH, "LINEA", "contracts.txt") #token_contracts
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, "LINEA", "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, "LINEA", "tokens.txt") #token_contracts
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
 
 
-    TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        }
-    ]'''
+
+    MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
+    ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
+    TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
 
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
@@ -382,32 +465,28 @@ class ETHER :
 
     CHAIN_ID = "1"
     CHAIN_NAME = "ethereum"
-    NATIVE_TOKEN = "0x0000000000001fF3684f28c67538d4D072C22734"
+    NATIVE_TOKEN = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
     # Paths to your wallet and address files
     KYBERSWAP_API_ROUTE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/routes")
     KYBERSWAP_API_BUILD = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/build")
-    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/route/encode")
+    KYBERSWAP_API_ENCODE = os.path.join(KYBERSWAP_API_BASE + CHAIN_NAME  + "/api/v1/route/encode")
     
     # Paths to your wallet and address files
     WALLET_FILE = os.path.join(BASE_PATH,"wallet.txt") #private keys
-    CONTRACTS_FILE = os.path.join(BASE_PATH, "ETHER", "contracts.txt") #token_contracts
-    TOKENS_KYBER_FILE = os.path.join(BASE_PATH, "ETHER", "tokens_kyber.txt") #tokens
+    CONTRACTS_FILE = os.path.join(BASE_PATH, "ETHER", "tokens.txt") #token_contracts
+    RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
+ 
 
 
-    TOKEN_ABI = '''[
-        {
-            "constant": false,
-            "inputs": [
-                {"name": "_to", "type": "address"},
-                {"name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [{"name": "", "type": "bool"}],
-            "type": "function"
-        }
-    ]'''
-
+    MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
+    ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
+    TOKEN_ABI = TOKEN_ABI
+    MULTICALL3_ADDRESS = MULTICALL3_ADDRESS     # or override with chain-specific address
+    MULTICALL3_ABI = MULTICALL3_ABI
+    ENS_REGISTRY_ABI = ENS_REGISTRY_ABI
+    ENS_PUBLIC_RESOLVER_ABI = ENS_PUBLIC_RESOLVER_ABI
+    ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
     INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"

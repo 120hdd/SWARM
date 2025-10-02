@@ -1,0 +1,3 @@
+# Enter receiver addresses or ENS names (one per line). Example:
+# vitalik.eth
+# 0x1234...abcd

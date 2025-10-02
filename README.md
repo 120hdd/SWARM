@@ -1,38 +1,33 @@
-# MWswap
-Automates low-fee, multi-wallet ERC20 swaps on KyberSwap with built-in gas safety
+# SWARM
 
-# KyberSwap Bulk Transfer Script
+Smart Wallet Automated Routine Manager (SWARM) automates low-fee Ethereum Virtual Machine (EVM) wallet routines such as batching ERC-20 swaps, token transfers, and balance checks. The CLI helps you fan out work across many wallets while keeping gas usage under control.
 
-This repository contains a **Python script** that automates **swap** ERC‑20 transfers via **KyberSwap**.
+## Highlights
+- Multi-wallet orchestration with sequential signing to avoid nonce clashes
+- Compatible with any EVM chain that exposes a JSON-RPC endpoint
+- KyberSwap-powered quoting plus custom RPC rotation for resilience
+- Optional desktop overlays (CustomTkinter) for richer feedback while long jobs run
+- Configurable resource files so you can preload wallets, tokens, and routing preferences
 
-## Features
-- Signs and sends each transfer in sequence (safe gas handling)  
-- Built‑in retry logic and basic logging  
-- Works on most EVM chains supported by KyberSwap  
-- Handles multiple‑wallet swap management  
-- Low fee
+## Prerequisites
+- Python 3.10 or newer (3.11 recommended)
+- Git
+- Network access to your target chain (Alchemy, Infura, or self-hosted node)
+- On Linux/macOS: system Tk bindings for the optional CustomTkinter UI (`sudo apt-get install python3-tk` or equivalent)
 
----
-
-## Quick Start
-
+## Quick Start
 ```bash
-# 1. Clone repo
+# 1. Clone the repository
 git clone https://github.com/120hdd/MWswap.git
-cd MWswap
+cd SWARM
 
-# 2. Run the setup script
+# 2. Make sure the setup script is executable (macOS/Linux)
+chmod +x setup.sh
+
+# 3. Provision the virtual environment and install dependencies
 ./setup.sh
-```
 
-### 3. Configure environment
-
-1. The setup script creates `.env` from `env.example` if it does not already exist.
-2. Open `.env` and fill in **all** required keys [Getting API Keys](#getting-api-keys)
-
-### 4. Run
-
-```bash
+# 4. Run the interactive task launcher
 python main_runner.py
 ```
 
@@ -74,17 +69,11 @@ python main_runner.py
 ---
 
 ## Contracts
-
-* KyberSwap represents the native token with the special address  
-  `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE`.  
-  The router swaps this to the true native token behind the scenes.  
 * You can specify token addresses manually via CLI **or** list them in  
   `/resources/<chain_name>/token_kyber.txt` (one `address,symbol` per line).
-
+  
 ---
-
 ## Wallets
-
 You can supply wallets interactively via CLI, or maintain a default list in  
 `/resources/wallet.txt`.
 

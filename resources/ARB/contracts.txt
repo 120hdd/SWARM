@@ -1,5 +1,0 @@
-# Enter contract addresses and symbols, one per line in the format:
-# 0xContractAddress SYMBOL
-# Example:
-# 0xTokenContractAddress SAND
-# 0xAnotherTokenAddress USDC

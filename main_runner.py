@@ -37,10 +37,20 @@ def run_selected_module():
             print("No Python modules found in the specified directory.")
             return
     
+        # Prepare numbered choices for better clarity in the CLI
+        # Show titles without the .py extension, but keep full filename as value
+        choices = [
+            questionary.Choice(
+                title=f"{idx + 1}. {os.path.splitext(fname)[0]}",
+                value=fname
+            )
+            for idx, fname in enumerate(sorted(python_files))
+        ]
+
         # Use questionary to ask the user to select a module to run
         selected_file = questionary.select(
-            "Select the module you want to run:",
-            choices=python_files
+            "Select the task you want to run:",
+            choices=choices
         ).ask()
 
         if selected_file:
