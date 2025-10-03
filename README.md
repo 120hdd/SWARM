@@ -28,16 +28,16 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
 
 2) Get the code and open the folder
 - Clone (or download) this repository and open it in a terminal:
-  - If cloning: `git clone https://github.com/120hdd/MWswap.git`
-  - Then change directory to the cloned folder (use the name you see after cloning), for example: `cd MWswap`
+  - If cloning: ```git clone https://github.com/120hdd/SWARM.git```
+  - Then change directory to the cloned folder (use the name you see after cloning), for example: `cd SWARM`
 
 3) Create a virtual environment and install packages
 - Create and activate a virtual environment:
-  - `python -m venv .venv`
-  - `./.venv/Scripts/Activate`
+  - ```python -m venv .venv```
+  - ```./.venv/Scripts/Activate```
 - Upgrade pip and install dependencies:
-  - `python -m pip install --upgrade pip`
-  - `pip install -r requirements.txt`
+  - ```python -m pip install --upgrade pip```
+  - ```pip install -r requirements.txt```
 
 4) Create your `.env`
 - Copy the example file: `copy env.example .env`
@@ -52,11 +52,11 @@ Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that co
 ### macOS / Linux
 1) Install prerequisites
 - Python 3.10+ and Git. On Linux you may also need Tk bindings for optional overlays:
-  - Ubuntu/Debian: `sudo apt-get install -y python3-tk`
+  - Ubuntu/Debian: ```sudo apt-get install -y python3-tk```
 
 2) Get the code and open the folder
-- `git clone https://github.com/120hdd/SWARM.git`
-- `cd MWswap` (or the folder name you cloned into)
+- ```git clone https://github.com/120hdd/SWARM.git```
+- ```cd MWswap``` (or the folder name you cloned into)
 
 3) Use the setup script (recommended)
 - Make it executable: `chmod +x setup.sh`
@@ -67,7 +67,7 @@ Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that co
 - macOS/Linux: `source .venv/bin/activate`
 
 5) Run SWARM
-- `python main_runner.py`
+- ```python main_runner.py```
 - Choose a task from the menu.
 
 ## Configure Your .env
@@ -85,8 +85,8 @@ Example `.env`:
 ALCHEMY_API_KEY=your_alchemy_key_here
 INFURA_API_KEY=your_infura_key_here
 # Optional advanced settings
-ALCHEMY_API_KEYS=key1,key2
-EXTRA_RPC_URLS=https://my.custom.node:8545
+#ALCHEMY_API_KEYS=key1,key2
+#EXTRA_RPC_URLS=https://my.custom.node:8545
 ```
 
 ### Getting API Keys
