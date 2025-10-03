@@ -18,7 +18,7 @@ Smart Wallet Automated Routine Manager (SWARM) automates low-fee Ethereum Virtua
 ## Quick Start
 ```bash
 # 1. Clone the repository
-git clone https://github.com/120hdd/MWswap.git
+git clone https://github.com/120hdd/SWARM.git
 cd SWARM
 
 # 2. Make sure the setup script is executable (macOS/Linux)
