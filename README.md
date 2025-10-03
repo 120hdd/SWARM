@@ -17,7 +17,7 @@ It’s designed to run safely across many wallets while keeping gas usage under 
 - Simple resource files to preload wallets, tokens, and receivers
 
 
-## Beginner Setup
+## Setup
 
 Follow the steps for your OS. If you’re brand new to Python, just copy/paste commands exactly as shown.
 
