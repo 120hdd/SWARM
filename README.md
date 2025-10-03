@@ -28,7 +28,6 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
 
 2) Get the code and open the folder
 - Clone (or download) this repository and open it in a terminal:
-  - If cloning:
   - ```
     git clone https://github.com/120hdd/SWARM.git
     ```
