@@ -72,9 +72,9 @@ Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that co
 
 ## Configure Your .env
 
-At minimum, set one of these so SWARM can talk to a blockchain node:
-- `ALCHEMY_API_KEY` (recommended)
-- `INFURA_API_KEY` (optional, used for gas price API in some chains)
+set these so SWARM can talk to a blockchain node:
+- `ALCHEMY_API_KEY` (RPC call)
+- `INFURA_API_KEY` (used for gas price API)
 
 You can also add advanced options:
 - `ALCHEMY_API_KEYS` — comma‑separated list of extra Alchemy keys for RPC rotation.
