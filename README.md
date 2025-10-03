@@ -33,7 +33,8 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
   git clone https://github.com/120hdd/SWARM.git
   ```
   ```
-  cd SWARM```
+  cd SWARM
+  ```
 
 3) Create a virtual environment and install packages
 - Create and activate a virtual environment:
