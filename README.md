@@ -37,9 +37,11 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
 3) Create a virtual environment and install packages
 - Create and activate a virtual environment:
   - ```
-  python -m venv .venv
-  ```
-  - ```./.venv/Scripts/Activate```
+    python -m venv .venv
+    ```
+  - ```
+    ./.venv/Scripts/Activate
+      ```
   - Upgrade pip and install dependencies:
   - ```python -m pip install --upgrade pip```
   - ```pip install -r requirements.txt```
