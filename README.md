@@ -70,7 +70,7 @@ python main_runner.py
 
 ## Contracts
 * You can specify token addresses manually via CLI **or** list them in  
-  `/resources/<chain_name>/token_kyber.txt` (one `address,symbol` per line).
+  `/resources/<chain_name>/tokens.txt` (one `address` per line).
   
 ---
 ## Wallets
