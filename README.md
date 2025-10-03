@@ -89,9 +89,20 @@ Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that co
   ```
   source .venv/bin/activate
   ```
+5) Create your `.env`
+- Copy the example file:
+  ```
+  copy env.example .env
+  ```
+- set your API keys 
+  ```
+  nano .env
+  ```
 
-5) Run SWARM
-- ```python main_runner.py```
+6) Run SWARM
+- ```
+  python main_runner.py
+  ```
 - Choose a task from the menu.
 
 ## Configure Your .env
