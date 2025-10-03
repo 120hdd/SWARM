@@ -1,86 +1,168 @@
 # SWARM
 
-Smart Wallet Automated Routine Manager (SWARM) automates low-fee Ethereum Virtual Machine (EVM) wallet routines such as batching ERC-20 swaps, token transfers, and balance checks. The CLI helps you fan out work across many wallets while keeping gas usage under control.
+Smart Wallet Automated Routine Manager (SWARM) helps you automate common EVM wallet routines such as:
+- Batch ERC‑20 swaps (via KyberSwap)
+- Batch token transfers
+- Multi‑wallet balance checks
+It’s designed to run safely across many wallets while keeping gas usage under control.
+
+![License](https://img.shields.io/badge/license-Apache%202.0-blue)
+![Python](https://img.shields.io/badge/python-3.10%2B-brightgreen)
+![Last Commit](https://img.shields.io/github/last-commit/120hdd/SWARM)
 
 ## Highlights
-- Multi-wallet orchestration with sequential signing to avoid nonce clashes
-- Compatible with any EVM chain that exposes a JSON-RPC endpoint
-- KyberSwap-powered quoting plus custom RPC rotation for resilience
-- Optional desktop overlays (CustomTkinter) for richer feedback while long jobs run
-- Configurable resource files so you can preload wallets, tokens, and routing preferences
+- Automates repetitive EVM wallet tasks
+- Batch execution across chains
+- KyberSwap‑powered quotes + resilient RPC rotation
+- Simple resource files to preload wallets, tokens, and receivers
 
-## Prerequisites
-- Python 3.10 or newer (3.11 recommended)
-- Git
-- Network access to your target chain (Alchemy, Infura, or self-hosted node)
-- On Linux/macOS: system Tk bindings for the optional CustomTkinter UI (`sudo apt-get install python3-tk` or equivalent)
 
-## Quick Start
-```bash
-# 1. Clone the repository
-git clone https://github.com/120hdd/SWARM.git
-cd SWARM
+## Beginner Setup
 
-# 2. Make sure the setup script is executable (macOS/Linux)
-chmod +x setup.sh
+Follow the steps for your OS. If you’re brand new to Python, just copy/paste commands exactly as shown.
 
-# 3. Provision the virtual environment and install dependencies
-./setup.sh
+### Windows (PowerShell)
+1) Install prerequisites
+- Install Python 3.10 or newer from python.org. During install, check “Add Python to PATH”.
+- Install Git from git-scm.com.
 
-# 4. Run the interactive task launcher
-python main_runner.py
+2) Get the code and open the folder
+- Clone (or download) this repository and open it in a terminal:
+  - If cloning: `git clone https://github.com/120hdd/MWswap.git`
+  - Then change directory to the cloned folder (use the name you see after cloning), for example: `cd MWswap`
+
+3) Create a virtual environment and install packages
+- Create and activate a virtual environment:
+  - `python -m venv .venv`
+  - `./.venv/Scripts/Activate`
+- Upgrade pip and install dependencies:
+  - `python -m pip install --upgrade pip`
+  - `pip install -r requirements.txt`
+
+4) Create your `.env`
+- Copy the example file: `copy env.example .env`
+- Open `.env` in a text editor and add your API keys (details below).
+
+5) Run SWARM
+- `python main_runner.py`
+- Choose a task from the menu (e.g., `kyberSwap`, `transfer_token`, `check_balance`).
+
+Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that comes with the standard Python installer. If overlays don’t appear, you can still use the CLI flows.
+
+### macOS / Linux
+1) Install prerequisites
+- Python 3.10+ and Git. On Linux you may also need Tk bindings for optional overlays:
+  - Ubuntu/Debian: `sudo apt-get install -y python3-tk`
+
+2) Get the code and open the folder
+- `git clone https://github.com/120hdd/SWARM.git`
+- `cd MWswap` (or the folder name you cloned into)
+
+3) Use the setup script (recommended)
+- Make it executable: `chmod +x setup.sh`
+- Run it: `./setup.sh`
+  - Creates `.venv`, installs `requirements.txt`, and copies `env.example` to `.env` if missing.
+
+4) Activate the virtual environment (if needed later)
+- macOS/Linux: `source .venv/bin/activate`
+
+5) Run SWARM
+- `python main_runner.py`
+- Choose a task from the menu.
+
+## Configure Your .env
+
+At minimum, set one of these so SWARM can talk to a blockchain node:
+- `ALCHEMY_API_KEY` (recommended)
+- `INFURA_API_KEY` (optional, used for gas price API in some chains)
+
+You can also add advanced options:
+- `ALCHEMY_API_KEYS` — comma‑separated list of extra Alchemy keys for RPC rotation.
+- `EXTRA_RPC_URLS` — comma‑separated list of full RPC URLs.
+
+Example `.env`:
+```
+ALCHEMY_API_KEY=your_alchemy_key_here
+INFURA_API_KEY=your_infura_key_here
+# Optional advanced settings
+ALCHEMY_API_KEYS=key1,key2
+EXTRA_RPC_URLS=https://my.custom.node:8545
 ```
 
----
+### Getting API Keys
+- Alchemy
+  1. Go to https://alchemy.com and create a free account.
+  2. Create an app for your target network (e.g., Ethereum Mainnet).
+  3. Copy the HTTP API URL (looks like `.../v2/<YOUR_KEY>`). Use the part after `/v2/` as `ALCHEMY_API_KEY`.
 
-## Environment Variables
+- Infura
+  1. Go to https://infura.io and create a project.
+  2. Select your network under Endpoints. Copy the HTTPS URL (contains `/v3/<PROJECT_ID>`).
+  3. Use the `<PROJECT_ID>` as `INFURA_API_KEY`.
 
-| Var | Description |
-|-----|-------------|
-| `ALCHEMY_API_KEY` | Your Alchemy HTTP key for the desired network |
-| `INFURA_API_KEY`  | (Optional) Your Infura API key |
+## Prepare Your Resources
 
----
+SWARM uses simple text files in `resources/` so you don’t re‑enter data each time.
 
-## Getting API Keys
+- Wallet private keys: `resources/wallet.txt`
+  - One private key per line. Supports `0x`‑prefixed or raw hex.
+  - Example:
+    ```
+    0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    ```
 
-### Alchemy
+- Receivers (for transfers): `resources/receiver_wallet.txt`
+  - One address or ENS per line.
+  - Example:
+    ```
+    vitalik.eth
+    0x1234567890abcdef1234567890abcdef12345678
+    ```
 
-1. Go to <https://alchemy.com>, sign up (free tier is fine).  
-2. Click **“Create App”**, choose the desired chain and network (e.g., `Ethereum Mainnet`).  
-3. In the app dashboard, copy the **HTTP API URL**—the long URL ends with something like `.../v2/ALCHEMY_API_KEY`.  
-4. Paste the value after the last slash (`ALCHEMY_API_KEY`) into your `.env`:
+- Token lists per chain: `resources/<CHAIN>/tokens.txt`
+  - One token address per line. The native token sentinel is `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE`.
+  - Examples:
+    - Polygon: `resources/POLYGON/tokens.txt`
+    - Base: `resources/BASE/tokens.txt`
+    - Ethereum: `resources/ETHER/tokens.txt`
+    - Optimism: `resources/OP/tokens.txt`
+    - Arbitrum: `resources/ARB/tokens.txt`
+    - Linea: `resources/LINEA/tokens.txt`
 
-   ```env
-   ALCHEMY_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   ```
+You can also enter wallets/tokens interactively from the UI/CLI when prompted.
 
-### Infura
+## Run Tasks
 
-1. Visit <https://infura.io>, create an account, and make a **New Project**.  
-2. Select the network (e.g., Mainnet) under **Endpoints**.  
-3. Copy the **HTTPS URL**—it contains your project ID at the end (after `/v3/`).  
-4. Put that ID in your `.env`:
+Run the launcher: `python main_runner.py` and pick a module. The common ones are:
+- `kyberSwap` — Batch swaps. You’ll pick chain, tokens, slippage, and gas tier. Handles allowance automatically.
+- `transfer_token` — Batch ERC‑20 transfers from multiple senders to receivers.
+- `check_balance` — Check balances across many wallets and tokens; writes CSV output in the repo root.
 
-   ```env
-   INFURA_API_KEY=yyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-   ```
+When a task starts, you’ll be asked to:
+- Select a chain (Polygon, OP, Base, ARB, Linea, Ethereum)
+- Choose how to enter wallets/tokens (from files, CLI, or GUI depending on OS)
+- Confirm/adjust gas settings (for swaps/transfers)
 
----
+## Troubleshooting
+- “No RPC URLs configured”
+  - Ensure `.env` has `ALCHEMY_API_KEY` or set `EXTRA_RPC_URLS`.
+- CustomTkinter/UI doesn’t show
+  - Windows: use the standard Python installer from python.org (includes Tk). You can still use CLI without UI.
+  - Linux: `sudo apt-get install -y python3-tk`.
+- Pip/build issues
+  - Upgrade pip: `python -m pip install --upgrade pip`.
+  - Recreate venv: delete `.venv/` then repeat setup.
+- Rate limits / flaky RPC
+  - Add more keys via `ALCHEMY_API_KEYS` or set `EXTRA_RPC_URLS`.
 
-## Contracts
-* You can specify token addresses manually via CLI **or** list them in  
-  `/resources/<chain_name>/tokens.txt` (one `address` per line).
-  
----
-## Wallets
-You can supply wallets interactively via CLI, or maintain a default list in  
-`/resources/wallet.txt`.
-
----
+## Notes
+- KyberSwap API headers: the default `x-client-id` in `config.py` is a placeholder. If you have a custom client id, set it there.
+- Files created on first run: helper utilities create placeholder files in `resources/` if missing.
 
 ## Contributing
+Pull requests are welcome — open an issue first to discuss changes.
 
-Pull requests are welcome—open an issue first to discuss changes.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-MIT License
+
