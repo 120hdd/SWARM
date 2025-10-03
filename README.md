@@ -44,8 +44,12 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
     ./.venv/Scripts/Activate
       ```
   - Upgrade pip and install dependencies:
-  - ```python -m pip install --upgrade pip```
-  - ```pip install -r requirements.txt```
+  - ```
+    python -m pip install --upgrade pip
+    ```
+  - ```
+    pip install -r requirements.txt
+    ```
 
 4) Create your `.env`
 - Copy the example file: `copy env.example .env`
