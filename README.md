@@ -46,8 +46,6 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
   - Upgrade pip and install dependencies:
   - ```
     python -m pip install --upgrade pip
-    ```
-  - ```
     pip install -r requirements.txt
     ```
 
