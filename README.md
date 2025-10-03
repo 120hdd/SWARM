@@ -50,7 +50,10 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
     ```
 
 4) Create your `.env`
-- Copy the example file: `copy env.example .env`
+- Copy the example file:
+  ```
+  copy env.example .env
+  ```
 - Open `.env` in a text editor and add your API keys (details below).
 
 5) Run SWARM
@@ -68,15 +71,24 @@ Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that co
 - ```
   git clone https://github.com/120hdd/SWARM.git
   ```
-- ```cd MWswap``` (or the folder name you cloned into)
+- ```cd SWARM``` (or the folder name you cloned into)
 
 3) Use the setup script (recommended)
-- Make it executable: ```chmod +x setup.sh ```
-- Run it: `./setup.sh`
+- Make it executable:
+  ```
+  chmod +x setup.sh 
+  ```
+- Run it: 
+  ```
+  ./setup.sh
+  ```
   - Creates `.venv`, installs `requirements.txt`, and copies `env.example` to `.env` if missing.
 
 4) Activate the virtual environment (if needed later)
-- macOS/Linux: `source .venv/bin/activate`
+- macOS/Linux:
+  ```
+  source .venv/bin/activate
+  ```
 
 5) Run SWARM
 - ```python main_runner.py```
