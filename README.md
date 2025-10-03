@@ -8,7 +8,7 @@ It’s designed to run safely across many wallets while keeping gas usage under 
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-brightgreen)
-![Last Commit](https://img.shields.io/github/last-commit/120hdd/SWARM)
+
 
 ## Highlights
 - Automates repetitive EVM wallet tasks
