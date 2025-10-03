@@ -264,7 +264,6 @@ class POLYGON :
 # RPC URL for connecting to Polygon mainnet
     ALCHEMY_API_KEY = ALCHEMY_API_KEY
     ALCHEMY_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
-    #TATUM_API_KEY = "t-6722ee17eac5621e6ae170eb-c8f714a9b5284645a001f7ee"
     
     CHAIN_ID = 137
     CHAIN_NAME = "polygon"
@@ -292,11 +291,7 @@ class POLYGON :
 
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
-
-
-    # Infura URLs for RPC and Gas Price API
-    INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
+        
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
     # Uniswap V3 Quoter Address
 
@@ -332,11 +327,9 @@ class OP :
     ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
 
     # Infura Gas API Key for gas price estimation
-    INFURA_API_KEY = "cbd40adce35444b88bcbca3103b7408c"
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
+    INFURA_API_KEY = INFURA_API_KEY
 
-    # Infura URLs for RPC and Gas Price API
-    #INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
+
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
 
 class Base :
@@ -359,8 +352,6 @@ class Base :
     CONTRACTS_FILE = os.path.join(BASE_PATH, "BASE", "tokens.txt") #token_contracts
     RECEIVERS_FILE = os.path.join(BASE_PATH, "receiver_wallet.txt")
 
-
-
     MINIMAL_ABI_PERMIT = MINIMAL_ABI_PERMIT
     ERC20_PERMIT_ABI = ERC20_PERMIT_ABI
     TOKEN_ABI = TOKEN_ABI
@@ -372,10 +363,6 @@ class Base :
 
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
-
-    # Infura URLs for RPC and Gas Price API
-    #INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
 
 class ARB :
@@ -410,11 +397,7 @@ class ARB :
     ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
     
     # Infura Gas API Key for gas price estimation
-    INFURA_API_KEY = INFURA_API_KEY
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
-
-    # Infura URLs for RPC and Gas Price API
-    #INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
+    INFURA_API_KEY = INFURA_API_KE
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
     
 class Linea :
@@ -451,10 +434,6 @@ class Linea :
 
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
-
-    # Infura URLs for RPC and Gas Price API
-    #INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
 
 class ETHER :
@@ -489,10 +468,6 @@ class ETHER :
     ENS_REGISTRY_ADDRESS = ENS_REGISTRY_ADDRESS
     # Infura Gas API Key for gas price estimation
     INFURA_API_KEY = INFURA_API_KEY
-    INFURA_API_KEY2 = "ae375268a0ed49eab2313e2f1ac912bf"
-
-    # Infura URLs for RPC and Gas Price API
-    #INFURA_RPC_URL = f"https://polygon-mainnet.g.alchemy.com/v2/JU3_TwEZDx6bPNyDc1AgrRZWphXoPEVk"
     INFURA_GAS_API_URL = f"https://gas.api.infura.io/v3/{INFURA_API_KEY}/networks/{CHAIN_ID}/suggestedGasFees"
     
 MODULE_PATH = Path(__file__).resolve().parent / "modules"
