@@ -34,7 +34,7 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
   ```
   - ```
     cd SWARM
-    ```
+  ```
 
 3) Create a virtual environment and install packages
 - Create and activate a virtual environment:
