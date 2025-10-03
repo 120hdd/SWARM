@@ -29,36 +29,23 @@ Follow the steps for your OS. If you’re brand new to Python, just copy/paste c
 2) Get the code and open the folder
 - Clone (or download) this repository and open it in a terminal:
   - If cloning:
-  ```
-  git clone https://github.com/120hdd/SWARM.git
-  ```
+  ```git clone https://github.com/120hdd/SWARM.git```
   - Then change directory to the cloned folder (use the name you see after cloning), for example: `cd SWARM`
 
 3) Create a virtual environment and install packages
 - Create and activate a virtual environment:
-  - ```
-    python -m venv .venv
-  ```
-  - ```
-  ./.venv/Scripts/Activate
-  ```
-- Upgrade pip and install dependencies:
-  - ```
-    python -m pip install --upgrade pip
-  
-  ```
-  - ```
-  pip install -r requirements.txt
-  ```
+  - ```python -m venv .venv```
+  - ```./.venv/Scripts/Activate```
+  - Upgrade pip and install dependencies:
+  - ```python -m pip install --upgrade pip```
+  - ```pip install -r requirements.txt```
 
 4) Create your `.env`
 - Copy the example file: `copy env.example .env`
 - Open `.env` in a text editor and add your API keys (details below).
 
 5) Run SWARM
-- ```
-  python main_runner.py
-  ```
+- ```python main_runner.py```
 - Choose a task from the menu (e.g., `kyberSwap`, `transfer_token`, `check_balance`).
 
 Note (optional UI): CustomTkinter uses the built‑in Windows Tk runtime that comes with the standard Python installer. If overlays don’t appear, you can still use the CLI flows.
