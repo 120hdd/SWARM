@@ -1,0 +1,29 @@
+# Byte‑compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Environment variables
+.env
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+.tox/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+**/__pycache__/
+*.pyc
